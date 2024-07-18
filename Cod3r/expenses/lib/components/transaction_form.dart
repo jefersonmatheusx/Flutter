@@ -1,14 +1,31 @@
 import 'package:flutter/material.dart';
 
-class TransactionForm extends StatelessWidget {
-  final titleController = TextEditingController();
-  final valueController = TextEditingController();
-  final Function addTransaction;
+class TransactionForm extends StatefulWidget {
+  final Function onSubmit;
 
   TransactionForm({
+    required this.onSubmit,
     super.key,
-    required this.addTransaction,
   });
+
+  @override
+  State<TransactionForm> createState() => _TransactionFormState();
+}
+
+class _TransactionFormState extends State<TransactionForm> {
+  final titleController = TextEditingController();
+
+  final valueController = TextEditingController();
+
+  _submitForm() {
+    final title = titleController.text;
+    final value = double.tryParse(valueController.text) ?? 0.0;
+    if (title.isEmpty || value <= 0.0) {
+      return;
+    }
+    widget.onSubmit(title, value);
+    //todo - scrolldown
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,12 +35,15 @@ class TransactionForm extends StatelessWidget {
         padding: EdgeInsets.all(10),
         child: Column(children: <Widget>[
           TextField(
+            onSubmitted: (_) => _submitForm(),
             controller: titleController,
             decoration: InputDecoration(
               labelText: 'Título',
             ),
           ),
           TextField(
+            onSubmitted: (_) => _submitForm(),
+            keyboardType: TextInputType.numberWithOptions(decimal: true),
             controller: valueController,
             decoration: InputDecoration(
               labelText: 'Valor (R\$)',
@@ -33,12 +53,7 @@ class TransactionForm extends StatelessWidget {
             TextButton.icon(
               label: const Text('Nova transação'),
               icon: const Icon(Icons.add),
-              onPressed: () {
-                print(titleController.text);
-                print(valueController.text);
-                double valueDouble = double.parse(valueController.text);
-                this.addTransaction(titleController.text, valueDouble);
-              },
+              onPressed: _submitForm,
             ),
           ]),
         ]),

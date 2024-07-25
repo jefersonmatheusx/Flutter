@@ -5,17 +5,17 @@ const COLOR_ACCENT = Colors.orange;
 const TextTheme TEXT_THEME = TextTheme(
     titleMedium: TextStyle(
       fontFamily: 'OpenSans',
-      fontSize: 18,
+      // fontSize: 18,
       fontWeight: FontWeight.bold,
     ),
     titleSmall: TextStyle(
       fontFamily: 'OpenSans',
-      fontSize: 24,
+      // fontSize: 24,
       fontWeight: FontWeight.bold,
     ),
     labelMedium: TextStyle(
       fontFamily: 'OpenSans',
-      fontSize: 22,
+      // fontSize: 22,
       fontWeight: FontWeight.bold,
     ));
 

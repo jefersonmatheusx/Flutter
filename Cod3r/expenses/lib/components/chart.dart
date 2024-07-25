@@ -55,26 +55,24 @@ class _ChartState extends State<Chart> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      child: Card(
-        elevation: 6,
-        margin: const EdgeInsets.all(20),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: groupedTransactions.map((tr) {
-              return Flexible(
-                  fit: FlexFit.tight,
-                  child: ChartBar(
-                    label: tr['day'].toString(),
-                    value: tr['value'] as double,
-                    percentage: _weekTotalValue == 0.0
-                        ? 0.0
-                        : (tr['value'] as double) / _weekTotalValue,
-                  ));
-            }).toList(),
-          ),
+    return Card(
+      elevation: 6,
+      margin: const EdgeInsets.all(20),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: groupedTransactions.map((tr) {
+            return Flexible(
+                fit: FlexFit.tight,
+                child: ChartBar(
+                  label: tr['day'].toString(),
+                  value: tr['value'] as double,
+                  percentage: _weekTotalValue == 0.0
+                      ? 0.0
+                      : (tr['value'] as double) / _weekTotalValue,
+                ));
+          }).toList(),
         ),
       ),
     );

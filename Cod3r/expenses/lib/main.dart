@@ -134,6 +134,8 @@ class _MyHomePageState extends State<MyHomePage> {
     ),
   ];
 
+  bool _showChart = false;
+
   List<Transaction> get _recentTransactions {
     return _transactions.where((tr) {
       return tr.date.isAfter(DateTime.now().subtract(
@@ -170,33 +172,63 @@ class _MyHomePageState extends State<MyHomePage> {
             ));
   }
 
+  _showChartFunction(bool value) {
+    setState(() {
+      _showChart = value;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () => _openTransactionFormModal(context),
-          ),
-          Switch(
-            value: _themeManager.themeMode == ThemeMode.dark,
-            onChanged: (value) {
-              _themeManager.toggleTheme(value);
-            },
-          ),
-        ],
-        // backgroundColor: Theme.of(context).colorScheme.primary,
-        title: Text(
-          'Despesas pessoais',
+    final appBarr = AppBar(
+      actions: <Widget>[
+        IconButton(
+          icon: const Icon(Icons.add),
+          onPressed: () => _openTransactionFormModal(context),
         ),
+        Switch(
+          value: _themeManager.themeMode == ThemeMode.dark,
+          onChanged: (value) {
+            _themeManager.toggleTheme(value);
+          },
+        ),
+      ],
+      // backgroundColor: Theme.of(context).colorScheme.primary,
+      title: Text(
+        'Despesas pessoais',
       ),
+    );
+
+    final availableHeight = MediaQuery.of(context).size.height -
+        appBarr.preferredSize.height -
+        MediaQuery.of(context).padding.top;
+
+    return Scaffold(
+      appBar: appBarr,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Chart(_recentTransactions),
-            TransactionList(_transactions, _deleteTransaction),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Exibir Grafico',
+                ),
+                Switch(value: _showChart, onChanged: _showChartFunction),
+              ],
+            ),
+            if (_showChart)
+              Container(
+                height: availableHeight * 0.3,
+                child: Chart(_recentTransactions),
+              ),
+            if (!_showChart)
+              Container(
+                height: availableHeight * 0.7,
+                child: TransactionList(_transactions, _deleteTransaction),
+              ),
+           
           ],
         ),
       ),

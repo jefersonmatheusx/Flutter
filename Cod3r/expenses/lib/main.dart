@@ -180,8 +180,16 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+    bool isLandscape = mediaQuery.orientation == Orientation.landscape;
     final appBarr = AppBar(
       actions: <Widget>[
+        if (isLandscape)
+          IconButton(
+              icon: Icon(_showChart ? Icons.list : Icons.pie_chart),
+              onPressed: () => setState(() {
+                    _showChart = !_showChart;
+                  })),
         IconButton(
           icon: const Icon(Icons.add),
           onPressed: () => _openTransactionFormModal(context),
@@ -199,9 +207,9 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
 
-    final availableHeight = MediaQuery.of(context).size.height -
+    final availableHeight = mediaQuery.size.height -
         appBarr.preferredSize.height -
-        MediaQuery.of(context).padding.top;
+        mediaQuery.padding.top;
 
     return Scaffold(
       appBar: appBarr,
@@ -209,26 +217,17 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Exibir Grafico',
-                ),
-                Switch(value: _showChart, onChanged: _showChartFunction),
-              ],
-            ),
-            if (_showChart)
+            if (_showChart || !isLandscape)
               Container(
-                height: availableHeight * 0.3,
+                height:
+                    isLandscape ? availableHeight * 0.7 : availableHeight * 0.3,
                 child: Chart(_recentTransactions),
               ),
-            if (!_showChart)
+            if (!_showChart || !isLandscape)
               Container(
                 height: availableHeight * 0.7,
                 child: TransactionList(_transactions, _deleteTransaction),
               ),
-           
           ],
         ),
       ),

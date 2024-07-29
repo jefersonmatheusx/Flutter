@@ -32,9 +32,15 @@ class AdaptativeButton extends StatelessWidget {
                 )),
             onPressed: onPressed,
             style: ButtonStyle(
+              // backgroundColor: WidgetStateProperty.all<Color>(
+              //   Theme.of(context).colorScheme.secondary,
+              // ),
+              // foregroundColor: WidgetStateProperty.all<Color>(
+              //   Theme.of(context).colorScheme.onSecondary,
+              // ),
               shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(4.0),
+                  borderRadius: BorderRadius.circular(6.0),
                 ),
               ),
               side: WidgetStateProperty.all<BorderSide>(

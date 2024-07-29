@@ -1,4 +1,5 @@
 import 'package:expenses/components/adaptative_button.dart';
+import 'package:expenses/components/adaptative_date_picker.dart';
 import 'package:expenses/components/adaptative_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -26,21 +27,6 @@ class _TransactionFormState extends State<TransactionForm> {
     initializeDateFormatting('pt_BR', null);
   }
 
-  _showDatePicker() {
-    showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2019),
-      lastDate: DateTime.now(),
-    ).then((pickedDate) {
-      if (pickedDate == null) {
-        return;
-      }
-      setState(() {
-        _selectedDate = pickedDate;
-      });
-    });
-  }
 
   _submitForm() {
     final title = _titleController.text;
@@ -62,7 +48,7 @@ class _TransactionFormState extends State<TransactionForm> {
     return Container(
       height: isLandscape
           ? alturaTela * 0.90 + alturaKeyboard
-          : alturaTela * 0.3 + alturaKeyboard,
+          : alturaTela * 0.32 + alturaKeyboard,
       child: SingleChildScrollView(
         child: Card(
           elevation: 5,
@@ -84,27 +70,13 @@ class _TransactionFormState extends State<TransactionForm> {
                 onSubmitted: (_) => _submitForm(),
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
               ),
-              Container(
-                height: 70,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                        _selectedDate == null
-                            ? 'Nenhuma data selecionada!'
-                            : 'Data Selecionada: ${DateFormat('dd MMMM y', 'pt_BR').format(_selectedDate)}',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                        )),
-                    TextButton(
-                      onPressed: _showDatePicker,
-                      child: const Text('Selecionar Data',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          )),
-                    )
-                  ],
-                ),
+              AdaptativeDatePicker(
+                selectedDate: _selectedDate,
+                onDateChanged: (newDate) {
+                  setState(() {
+                    _selectedDate = newDate;
+                  });
+                },
               ),
               Row(mainAxisAlignment: MainAxisAlignment.end, children: [
                 AdaptativeButton(

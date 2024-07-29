@@ -21,7 +21,7 @@ const TextTheme TEXT_THEME = TextTheme(
 
 ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,
-    primaryColor: COLOR_PRIMARY,
+    primaryColor: COLOR_ACCENT,
     appBarTheme: AppBarTheme(backgroundColor: COLOR_ACCENT),
     textTheme: TEXT_THEME,
     floatingActionButtonTheme:
@@ -34,11 +34,12 @@ ThemeData lightTheme = ThemeData(
         shape: WidgetStateProperty.all<OutlinedBorder>(RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20.0),
         )),
-        backgroundColor: WidgetStateProperty.all<Color>(COLOR_ACCENT),
+        backgroundColor: WidgetStateProperty.all<Color>(COLOR_PRIMARY),
+        foregroundColor: WidgetStateProperty.all<Color>(Colors.white),
       ),
     ),
     colorScheme: const ColorScheme(
-      primary: COLOR_PRIMARY,
+      primary: COLOR_ACCENT,
       onPrimary: Colors.white,
       secondary: COLOR_ACCENT,
       onSecondary: Colors.white,

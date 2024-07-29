@@ -1,3 +1,5 @@
+import 'package:expenses/components/adaptative_button.dart';
+import 'package:expenses/components/adaptative_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
@@ -71,20 +73,16 @@ class _TransactionFormState extends State<TransactionForm> {
                 right: 10,
                 top: 10),
             child: Column(children: <Widget>[
-              TextField(
-                onSubmitted: (_) => _submitForm(),
+              AdaptativeTextField(
+                label: 'Título',
                 controller: _titleController,
-                decoration: const InputDecoration(
-                  labelText: 'Título',
-                ),
+                onSubmitted: (_) => _submitForm(),
               ),
-              TextField(
+              AdaptativeTextField(
+                label: 'Valor (R\$)',
+                controller: _valueController,
                 onSubmitted: (_) => _submitForm(),
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
-                controller: _valueController,
-                decoration: const InputDecoration(
-                  labelText: 'Valor (R\$)',
-                ),
               ),
               Container(
                 height: 70,
@@ -109,25 +107,9 @@ class _TransactionFormState extends State<TransactionForm> {
                 ),
               ),
               Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                TextButton(
+                AdaptativeButton(
+                  label: 'Nova transação',
                   onPressed: _submitForm,
-                  style: ButtonStyle(
-                    shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(4.0),
-                      ),
-                    ),
-                    side: WidgetStateProperty.all<BorderSide>(
-                      BorderSide(
-                        color: Theme.of(context).colorScheme.primary,
-                        width: 2.0,
-                      ),
-                    ),
-                  ),
-                  child: const Text('Nova transação',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      )),
                 ),
               ]),
             ]),

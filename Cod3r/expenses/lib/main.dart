@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:expenses/components/adaptative_app_bar.dart';
 import 'package:expenses/components/chart.dart';
 import 'package:expenses/components/transaction_form.dart';
 import 'package:expenses/components/transaction_list.dart';
@@ -180,67 +181,19 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  _getAppBar(bool isLandscape) {
-    final isIOS = Platform.isIOS;
-    IconData chartIcon;
-    if (_showChart) {
-      chartIcon = !isIOS ? Icons.list : CupertinoIcons.square_list_fill;
-    } else {
-      chartIcon = !isIOS ? Icons.pie_chart : CupertinoIcons.chart_bar_circle;
-    }
-
-    final actions = <Widget>[
-      if (isLandscape) _getIconButton(chartIcon, _showChartFunction),
-      _getIconButton(!isIOS ? Icons.add : CupertinoIcons.add,
-          () => _openTransactionFormModal(context)),
-    ];
-
-    if (isIOS) {
-      return CupertinoNavigationBar(
-        middle: Text('Despesas pessoais'),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: actions,
-        ),
-      );
-    } else {
-      return AppBar(
-        actions: <Widget>[
-          ...actions,
-          Switch(
-            value: _themeManager.themeMode == ThemeMode.dark,
-            onChanged: (value) {
-              _themeManager.toggleTheme(value);
-            },
-          ),
-        ],
-        // backgroundColor: Theme.of(context).colorScheme.primary,
-        title: const Text(
-          'Despesas pessoais',
-        ),
-      );
-    }
-  }
-
-  Widget _getIconButton(IconData icon, Function() fn) {
-    return Platform.isIOS
-        ? GestureDetector(
-            onTap: fn,
-            child: Icon(icon),
-          )
-        : IconButton(
-            icon: Icon(icon),
-            onPressed: fn,
-          );
-  }
-
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
     bool isLandscape = mediaQuery.orientation == Orientation.landscape;
 
+    final adaptativeAppBar = AdaptativeAppBar(
+      themeManager: _themeManager,
+      openTransactionFormModal: _openTransactionFormModal,
+      showChartFunction: _showChartFunction,
+    );
+
     final availableHeight = mediaQuery.size.height -
-        _getAppBar(isLandscape).preferredSize.height -
+        adaptativeAppBar.appBarHeight(context) -
         mediaQuery.padding.top;
 
     final bodyPage = SafeArea(
@@ -266,11 +219,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
     return Platform.isIOS
         ? CupertinoPageScaffold(
-            navigationBar: _getAppBar(isLandscape),
+            navigationBar: adaptativeAppBar as ObstructingPreferredSizeWidget,
             child: bodyPage,
           )
         : Scaffold(
-            appBar: _getAppBar(isLandscape),
+            appBar: adaptativeAppBar,
             body: bodyPage,
             floatingActionButton: FloatingActionButton(
               // backgroundColor: Theme.of(context).colorScheme.primary,

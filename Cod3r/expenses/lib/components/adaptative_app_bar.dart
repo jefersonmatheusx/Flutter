@@ -17,10 +17,6 @@ class AdaptativeAppBar extends StatelessWidget implements PreferredSizeWidget {
       required this.openTransactionFormModal,
       this.context});
 
-  double appBarHeight(context) {
-    return _getAppBar(context).preferredSize.height;
-  }
-
   @override
   Size get preferredSize => Size.fromHeight(AppBar().preferredSize.height);
 
@@ -54,12 +50,7 @@ class AdaptativeAppBar extends StatelessWidget implements PreferredSizeWidget {
       return AppBar(
         actions: <Widget>[
           ...actions,
-          Switch(
-            value: themeManager.themeMode == ThemeMode.dark,
-            onChanged: (value) {
-              themeManager.toggleTheme(value);
-            },
-          ),
+          SwitchExample(themeManager: themeManager),
         ],
         // backgroundColor: Theme.of(context).colorScheme.primary,
         title: const Text(
@@ -84,5 +75,31 @@ class AdaptativeAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return _getAppBar(context);
+  }
+}
+
+class SwitchExample extends StatefulWidget {
+  final ThemeManager themeManager;
+  const SwitchExample({super.key, required this.themeManager});
+
+  @override
+  State<SwitchExample> createState() => _SwitchExampleState();
+}
+
+class _SwitchExampleState extends State<SwitchExample> {
+  @override
+  Widget build(BuildContext context) {
+    bool light = widget.themeManager.themeMode == ThemeMode.dark;
+    return Switch(
+      value: light,
+      onChanged: (value) {
+        print(value);
+        widget.themeManager.toggleTheme();
+        // This is called when the user toggles the switch.
+        setState(() {
+          light = value;
+        });
+      },
+    );
   }
 }

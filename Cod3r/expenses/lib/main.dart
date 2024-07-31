@@ -193,7 +193,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
 
     final availableHeight = mediaQuery.size.height -
-        adaptativeAppBar.appBarHeight(context) -
+        adaptativeAppBar.preferredSize.height -
         mediaQuery.padding.top;
 
     final bodyPage = SafeArea(
